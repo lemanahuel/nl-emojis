@@ -7,6 +7,7 @@ export default function Home (params) {
   const [list, setList] = React.useState(params.emojis || [])
   const listMap = new Map()
   list.forEach(e => listMap.set(e.group, [].concat(listMap.get(e.group) || [], [e])))
+  let EMOJI_FONT_SIZE = 1
 
   function onClickFilterBy (e, modality) {
     e.preventDefault()
@@ -18,6 +19,15 @@ export default function Home (params) {
       return emoji
     })
     setList(newList)
+  }
+
+  async function onClickFontSize (e, sign) {
+    e.preventDefault()
+    try {
+      EMOJI_FONT_SIZE += sign === '+' ? .1 : -.1
+      styles.emojiItem.fontSize = `${EMOJI_FONT_SIZE}em`
+    } catch (err) {
+    }
   }
 
   async function onClickCopy (e, emoji) {
@@ -33,17 +43,17 @@ export default function Home (params) {
   }
 
   const EmojisList = ({ list }) => (
-    <div className="emoji-container">
+    <div className={styles.emojiContainer}>
       {
         list.map(([g, list]) => {
           return (
-            <div className="emoji-group-container">
+            <div className={styles.emojiGroupContainer}>
               <h2>{g}</h2>
               <ul className={styles.grid}>
                 {list.map(emoji => {
                   return (
                     <li className={[styles.card].join(' ')} key={emoji.slug}>
-                      <a href="#" target="_blank" rel="noreferrer" onClick={e => onClickCopy(e, emoji.character)} >
+                      <a href="#" target="_blank" rel="noreferrer" className={styles.emojiItem} onClick={e => onClickCopy(e, emoji.character)} >
                         {emoji.character}
                       </a>
                     </li>
@@ -68,11 +78,10 @@ export default function Home (params) {
       <main className={styles.main}>
         <nav className={styles.nav}>
           <h1 className={styles.title}>Emojity</h1>
-          {/* <ul>
-            <li><a href="#" onClick={e => onClickFilterBy(e, 'online')}>Online</a></li>
-            <li><a href="#" onClick={e => onClickFilterBy(e, 'blended')}>Blended</a></li>
-            <li><a href="#" onClick={e => onClickFilterBy(e, 'presencial')}>Presencial</a></li>
-          </ul> */}
+          <ul>
+            <li><a href="#" onClick={e => onClickFontSize(e, '+')}>+</a></li>
+            <li><a href="#" onClick={e => onClickFontSize(e, '-')}>-</a></li>
+          </ul>
         </nav>
         {/* <p className={styles.description}>
           Get started by editing{' '}
