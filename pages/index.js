@@ -47,7 +47,7 @@ export default function Home (params) {
       {
         list.map(([g, list]) => {
           return (
-            <div className={styles.emojiGroupContainer}>
+            <div className={styles.emojiGroupContainer} key={g}>
               <h2>{g}</h2>
               <ul className={styles.grid}>
                 {list.map(emoji => {
